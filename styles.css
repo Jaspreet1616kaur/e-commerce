@@ -1,0 +1,33 @@
+.navbar {
+  padding-bottom: 0%;
+  font-style: italic;
+  color: aquamarine;
+}
+
+.card-img-top {
+  display: flex;
+  justify-content: center;
+  color: black;
+  max-width: 200px;
+  height: 300px;
+}
+
+.card-text h5 {
+  justify-content: center;
+  color: darkgray;
+}
+.card-text p {
+  font-style: italic;
+  color: green;
+}
+.container {
+  margin-top: 1%;
+  border: 5px solid red;
+}
+.discrP {
+  height: 4rem;
+  overflow: hidden;
+}
+.moreText {
+  height: auto;
+}
