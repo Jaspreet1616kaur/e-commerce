@@ -1,3 +1,7 @@
+/* search bar */
+
+//const category = Document.getElementById("category");
+
 /* ASYNC FUNCTION FETCH */
 function myFetch() {
   fetch("https://fakestoreapi.com/products")
@@ -10,17 +14,19 @@ function myFetch() {
       console.log(myData);
       // function call is : nameOfTheFunction()   , if there is some information inside the () it is called a parameter. nameOfTheFunction(paremert, paretemer2)
       createCards(myData);
+      createEvents(myData);
+    })
+    .catch((error) => {
+      console.log("error :>> ", error);
     });
 }
 
-// const myFunction = (myData) => {
-//   console.log("myData :>> ", myData);
-// };
-
 const createCards = (data) => {
+  console.log("data: ", data);
   let divContainer = document.getElementById("card-container");
   for (let i = 0; i < data.length; i++) {
     // console.log(data[i]);
+    divContainer.innerHTML = "";
     let divCard = document.createElement("div");
     divCard.setAttribute("class", "	col-sm-12	col-md-6	col-lg-4");
     divCard.classList.add("card");
@@ -29,6 +35,7 @@ const createCards = (data) => {
     //this is for image coding//
     let img = document.createElement("img");
     img.setAttribute("src", data[i].image);
+
     img.setAttribute("alt", "product picture");
 
     img.classList.add("card-img-top");
@@ -72,18 +79,34 @@ const createCards = (data) => {
       console.log("test");
       discrP.classList.toggle("moreText");
     });
-    // let divCollapseContainer = document.createElement("div");
-    // divCollapseContainer.classList.add("collapse");
-    // divCollapseContainer.setAttribute("id", "collapseExampl");
-    // cardBody.appendChild(divCollapseContainer);
+    // const displayData = (id) => {
+    //   const search = document.getElementById("search");
+    //   search.classList.remove.add("form-control me-2");
 
-    // let toggleDiv = document.createElement("card-Body");
-    // toggleDiv.setAttribute("id", "toggleDiv");
-    // toggleDiv.classList.add("p");
-    // cardBody.appendChild(toggleDiv);
+    //   const container = document.getElementById("card-container");
+    //   container.classList.remove("card-container");
+    // };
   }
 };
-
 /*about card*/
 // console.log(data);
+/*about serach bar filtering
+ */
+
+const createEvents = (data) => {
+  console.log("data: ", data);
+  const filterBar = document.getElementById("filterBar");
+  console.log(filterBar);
+
+  filterBar.addEventListener("input", (e) => {
+    console.log(e.target.value);
+
+    const filteredData = data.filter((item) => {
+      return item.title.toUpperCase().includes(e.target.value.toUpperCase());
+    });
+    createCards(filteredData);
+    console.log("filter :>> ", filteredData);
+  });
+};
+
 myFetch();
