@@ -1,7 +1,3 @@
-/* search bar */
-
-//const category = Document.getElementById("category");
-
 /* ASYNC FUNCTION FETCH */
 function myFetch() {
   fetch("https://fakestoreapi.com/products")
@@ -16,6 +12,8 @@ function myFetch() {
       createCards(myData);
       createEvents(myData);
       setDropdownFilter(myData);
+      setTitleFilter(myData);
+
       setEventListeners(myData);
     })
     .catch((error) => {
@@ -81,19 +79,20 @@ const createCards = (data) => {
     });
   }
 };
-
+// filteribg in searchbar
 const createEvents = (data) => {
   console.log("data: ", data);
   const filterBar = document.getElementById("filterBar");
 
   filterBar.addEventListener("input", (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
 
-    const filteredData = data.filter((item) => {
-      return item.title.toUpperCase().includes(e.target.value.toUpperCase());
-    });
-    createCards(filteredData);
-    console.log("filter :>> ", filteredData);
+    // const filteredData = data.filter((item) => {
+    //   return item.title.toUpperCase().includes(e.target.value.toUpperCase());
+    // });
+    // createCards(filteredData);
+    // console.log("filter :>> ", filteredData);
+    filterCombined(data);
   });
 };
 
@@ -101,16 +100,15 @@ const createEvents = (data) => {
 const setEventListeners = (data) => {
   document
     .querySelector("#category-dropdown")
-    .addEventListener("change", () => {
-      // console.log("Fist event: ", event.target.value);
-      selectItemDropdown(data);
+    .addEventListener("change", (e) => {
+      console.log(e.target.value);
+      // selectItemDropdown(data);
+      filterCombined(data);
     });
-  document
-    .querySelector("#rating-dropdown")
-    .addEventListener("change", (event) => {
-      // console.log("second event: ", event.target.value);
-      filterByRating(data);
-    });
+
+  document.querySelector("#title-dropdown").addEventListener("change", () => {
+    filterByTitle(data);
+  });
 };
 
 const setDropdownFilter = (data) => {
@@ -131,7 +129,7 @@ const setDropdownFilter = (data) => {
   });
   // displayCardData(cleanedFilter);
 };
-//populate the data in one of the dropdowns
+//filtering the data in one of the dropdowns
 const selectItemDropdown = (data) => {
   const dropdown = document.getElementById("category-dropdown").value;
   console.log("dropdown: ", dropdown);
@@ -143,4 +141,75 @@ const selectItemDropdown = (data) => {
   createCards(categorys);
 };
 
+// create a funtion
+const setTitleFilter = (data) => {
+  const dropDownValue = document.querySelector("#title-dropdown");
+
+  let repateTitle = [];
+  const filterDouble = data.filter((title) => {
+    return repateTitle.push(title.title);
+  });
+  let cleanedData = [...new Set(repateTitle)];
+  console.log("cleanedData: ", cleanedData);
+  cleanedData.forEach((title) => {
+    const option = document.createElement("option");
+    option.innerText = title.toUpperCase();
+    dropDownValue.appendChild(option);
+  });
+};
+// filtering in title;
+const filterByTitle = (data) => {
+  const dropdown = document.getElementById("title-dropdown").value;
+  console.log("dropdown:>> ", dropdown.toupperCase());
+
+  const tiltes = data.filter((title) => {
+    // console.log("title.title: ", title.title === dropdown.toLowerCase());
+    return title.title === dropdown.toLowerCase();
+  });
+  console.log("titles: ", tiltes);
+  createCards(tiltes);
+};
+
+const filterCombined = (data) => {
+  const dropDownValue = document
+    .querySelector("#category-dropdown")
+    .value.toLowerCase();
+  // console.log("dropDownValue :>> ", dropDownValue);
+  const filterBar = document.getElementById("filterBar").value;
+  console.log("filterbar >>>", filterBar);
+
+  //find the value you select with the select
+
+  //then with the use of the And operator (&&) , include a third condition in the filters combined: return (dropdown..condition)&&(search bar condition..)&&(select condition)
+
+  const filteredCategoriesResut = data.filter((category) => {
+    return (
+      (category.category === dropDownValue.toLowerCase() ||
+        dropDownValue === "all") &&
+      category.title.toUpperCase().includes(filterBar.toUpperCase())
+    );
+  });
+  console.log("filteredCategoriesResut :>> ", filteredCategoriesResut);
+  createCards(filteredCategoriesResut);
+};
+// this is  extra try to price list
+// const setupPrice = (data) => {
+//   const priceInput = getElement(".price-filter");
+//   const priceValue = getElement(".price-value");
+//   // setup filter
+//   let maxPrice = data.map((container) => price.price);
+//   maxPrice = Math.max(...maxPrice);
+//   maxPrice = Math.ceil(maxPrice / 100);
+//   priceInput.value = maxPrice;
+//   priceInput.max = maxPrice;
+//   priceInput.min = 0;
+//   priceValue.textContent = "value $${maxPrice}";
+//   priceInput.addEventListener("input", function () {
+//     const value = parseInt(priceValue.value);
+
+//     priceValue.textContent = "value: $${value}";
+//     let newStore = data.filter((container) => price.price / 100 <= value);
+//     display(newStore, getElement("card-text"));
+//   });
+// };
 myFetch();

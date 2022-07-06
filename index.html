@@ -67,17 +67,22 @@
         </select>
       </div>
       <div class="col">
-        <label for="Rating">Sort by rating:</label>
-        <select name="Rating" id="rating-dropdown">
+        <label for="title"> sort with title:</label>
+        <select name="title" id="title-dropdown">
           <option value="all">All</option>
       </div>
       <div class="col">
         <input type="checkbox" id="description" name="description" value="">
         <label for="description">Has description?</label>
       </div>
+      <!-- price  -->
+      <h4>price</h4>
+      <form class="price-form">
+        <input type="range" class="price-filter" min="0" value="50" max="100" />
+      </form>
+      <p class="price-value"></p>
     </div>
   </div>
-
 
   <!-- this is api card class -->
 
