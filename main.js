@@ -15,6 +15,8 @@ function myFetch() {
       // function call is : nameOfTheFunction()   , if there is some information inside the () it is called a parameter. nameOfTheFunction(paremert, paretemer2)
       createCards(myData);
       createEvents(myData);
+      setDropdownFilter(myData);
+      setEventListeners(myData);
     })
     .catch((error) => {
       console.log("error :>> ", error);
@@ -24,20 +26,18 @@ function myFetch() {
 const createCards = (data) => {
   console.log("data: ", data);
   let divContainer = document.getElementById("card-container");
+  divContainer.innerHTML = "";
   for (let i = 0; i < data.length; i++) {
     // console.log(data[i]);
-    divContainer.innerHTML = "";
     let divCard = document.createElement("div");
-    divCard.setAttribute("class", "	col-sm-12	col-md-6	col-lg-4");
+    divCard.setAttribute("class", "	col-sm-12	col-md-6	col-lg-4 ");
     divCard.classList.add("card");
     divCard.classList.add("border-info");
 
     //this is for image coding//
     let img = document.createElement("img");
     img.setAttribute("src", data[i].image);
-
     img.setAttribute("alt", "product picture");
-
     img.classList.add("card-img-top");
     let cardBody = document.createElement("div");
     cardBody.classList.add("card-Body");
@@ -79,24 +79,12 @@ const createCards = (data) => {
       console.log("test");
       discrP.classList.toggle("moreText");
     });
-    // const displayData = (id) => {
-    //   const search = document.getElementById("search");
-    //   search.classList.remove.add("form-control me-2");
-
-    //   const container = document.getElementById("card-container");
-    //   container.classList.remove("card-container");
-    // };
   }
 };
-/*about card*/
-// console.log(data);
-/*about serach bar filtering
- */
 
 const createEvents = (data) => {
   console.log("data: ", data);
   const filterBar = document.getElementById("filterBar");
-  console.log(filterBar);
 
   filterBar.addEventListener("input", (e) => {
     console.log(e.target.value);
@@ -107,6 +95,52 @@ const createEvents = (data) => {
     createCards(filteredData);
     console.log("filter :>> ", filteredData);
   });
+};
+
+//listen for the events from the two HTML elements
+const setEventListeners = (data) => {
+  document
+    .querySelector("#category-dropdown")
+    .addEventListener("change", () => {
+      // console.log("Fist event: ", event.target.value);
+      selectItemDropdown(data);
+    });
+  document
+    .querySelector("#rating-dropdown")
+    .addEventListener("change", (event) => {
+      // console.log("second event: ", event.target.value);
+      filterByRating(data);
+    });
+};
+
+const setDropdownFilter = (data) => {
+  const dropDownValue = document.querySelector("#category-dropdown");
+
+  /* created double categories */
+  let doubleCategories = [];
+  const filteredDouble = data.filter((category) => {
+    return doubleCategories.push(category.category);
+  });
+  /* deleted repeated data */
+  let cleanedFilter = [...new Set(doubleCategories)];
+
+  cleanedFilter.forEach((category) => {
+    const option = document.createElement("option");
+    option.innerText = category.toUpperCase();
+    dropDownValue.appendChild(option);
+  });
+  // displayCardData(cleanedFilter);
+};
+//populate the data in one of the dropdowns
+const selectItemDropdown = (data) => {
+  const dropdown = document.getElementById("category-dropdown").value;
+  console.log("dropdown: ", dropdown);
+
+  const categorys = data.filter((category) => {
+    return category.category === dropdown.toLowerCase() || dropdown === "all";
+  });
+  console.log("categorys: ", categorys);
+  createCards(categorys);
 };
 
 myFetch();
