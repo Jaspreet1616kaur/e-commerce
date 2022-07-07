@@ -13,7 +13,6 @@ function myFetch() {
       createEvents(myData);
       setDropdownFilter(myData);
       setTitleFilter(myData);
-
       setEventListeners(myData);
     })
     .catch((error) => {
@@ -79,7 +78,7 @@ const createCards = (data) => {
     });
   }
 };
-// filteribg in searchbar
+// filtering in searchbar
 const createEvents = (data) => {
   console.log("data: ", data);
   const filterBar = document.getElementById("filterBar");
@@ -107,10 +106,12 @@ const setEventListeners = (data) => {
     });
 
   document.querySelector("#title-dropdown").addEventListener("change", () => {
-    filterByTitle(data);
+    // filterByTitle(data);
+    filterCombined(data);
+    // console.log(e.target.value);
   });
 };
-
+// dropdown slect category
 const setDropdownFilter = (data) => {
   const dropDownValue = document.querySelector("#category-dropdown");
 
@@ -129,7 +130,7 @@ const setDropdownFilter = (data) => {
   });
   // displayCardData(cleanedFilter);
 };
-//filtering the data in one of the dropdowns
+//filtering in category one of the dropdowns
 const selectItemDropdown = (data) => {
   const dropdown = document.getElementById("category-dropdown").value;
   console.log("dropdown: ", dropdown);
@@ -141,7 +142,7 @@ const selectItemDropdown = (data) => {
   createCards(categorys);
 };
 
-// create a funtion
+// create a funtion in title
 const setTitleFilter = (data) => {
   const dropDownValue = document.querySelector("#title-dropdown");
 
@@ -160,7 +161,7 @@ const setTitleFilter = (data) => {
 // filtering in title;
 const filterByTitle = (data) => {
   const dropdown = document.getElementById("title-dropdown").value;
-  console.log("dropdown:>> ", dropdown.toupperCase());
+  // console.log("dropdown:>> ", dropdown.toupperCase());
 
   const tiltes = data.filter((title) => {
     // console.log("title.title: ", title.title === dropdown.toLowerCase());
@@ -170,46 +171,38 @@ const filterByTitle = (data) => {
   createCards(tiltes);
 };
 
+// combined filtering  with category and serch bar
 const filterCombined = (data) => {
+  // ––––––THis is to find the value selected in the dropdown–––––
   const dropDownValue = document
     .querySelector("#category-dropdown")
     .value.toLowerCase();
-  // console.log("dropDownValue :>> ", dropDownValue);
-  const filterBar = document.getElementById("filterBar").value;
-  console.log("filterbar >>>", filterBar);
+  console.log("dropDownValue :>> ", dropDownValue);
+  //––––––––––––––––––––––––––––––––––––––––––––––––––
 
-  //find the value you select with the select
+  // ––––––THis is to find the value that you type in the search bar (it is an input element)–––––
+  const filterBarValue = document
+    .getElementById("filterBar")
+    .value.toUpperCase();
+  console.log("filterbar >>>", filterBarValue);
+  //––––––––––––––––––––––––––––––––––––––––––––––––––
 
+  // ––––––THis is to find the value selected in the select
+  const selectValue = document.getElementById("title-dropdown").value;
+  console.log("selectValue:>> ", selectValue);
+  //––––––––––––––––––––––––––––––––––––––––––––––––––
   //then with the use of the And operator (&&) , include a third condition in the filters combined: return (dropdown..condition)&&(search bar condition..)&&(select condition)
 
-  const filteredCategoriesResut = data.filter((category) => {
+  const filteredCategoriesResut = data.filter((singleElement) => {
     return (
-      (category.category === dropDownValue.toLowerCase() ||
-        dropDownValue === "all") &&
-      category.title.toUpperCase().includes(filterBar.toUpperCase())
+      singleElement.title.toUpperCase().includes(filterBarValue) &&
+      (selectValue === singleElement.title.toUpperCase() ||
+        selectValue === "all") &&
+      (singleElement.category === dropDownValue || dropDownValue === "all")
     );
   });
   console.log("filteredCategoriesResut :>> ", filteredCategoriesResut);
   createCards(filteredCategoriesResut);
 };
-// this is  extra try to price list
-// const setupPrice = (data) => {
-//   const priceInput = getElement(".price-filter");
-//   const priceValue = getElement(".price-value");
-//   // setup filter
-//   let maxPrice = data.map((container) => price.price);
-//   maxPrice = Math.max(...maxPrice);
-//   maxPrice = Math.ceil(maxPrice / 100);
-//   priceInput.value = maxPrice;
-//   priceInput.max = maxPrice;
-//   priceInput.min = 0;
-//   priceValue.textContent = "value $${maxPrice}";
-//   priceInput.addEventListener("input", function () {
-//     const value = parseInt(priceValue.value);
 
-//     priceValue.textContent = "value: $${value}";
-//     let newStore = data.filter((container) => price.price / 100 <= value);
-//     display(newStore, getElement("card-text"));
-//   });
-// };
 myFetch();
