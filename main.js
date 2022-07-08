@@ -9,8 +9,8 @@ function myFetch() {
       const myData = actualData;
       console.log(myData);
       // function call is : nameOfTheFunction()   , if there is some information inside the () it is called a parameter. nameOfTheFunction(paremert, paretemer2)
-      createCards(myData);
-      createEvents(myData);
+      // createCards(myData);
+      // createEvents(myData);
       setDropdownFilter(myData);
       setTitleFilter(myData);
       setEventListeners(myData);
@@ -19,13 +19,12 @@ function myFetch() {
       console.log("error :>> ", error);
     });
 }
-
+// here  is create card
 const createCards = (data) => {
   console.log("data: ", data);
   let divContainer = document.getElementById("card-container");
   divContainer.innerHTML = "";
   for (let i = 0; i < data.length; i++) {
-    // console.log(data[i]);
     let divCard = document.createElement("div");
     divCard.setAttribute("class", "	col-sm-12	col-md-6	col-lg-4 ");
     divCard.classList.add("card");
@@ -38,27 +37,28 @@ const createCards = (data) => {
     img.classList.add("card-img-top");
     let cardBody = document.createElement("div");
     cardBody.classList.add("card-Body");
-    //this is for title//
+    //This is for title//
     let h5 = document.createElement("h5");
     cardBody.classList.add("card-title");
     h5.innerHTML = data[i].title;
-
+    // This is for price
     let p = document.createElement("p");
     cardBody.classList.add("card-text");
     p.innerHTML = data[i].price;
+    // This is for Discription
+    let discrP = document.createElement("p");
+    // cardBody.classList.add("card-text");
+    discrP.setAttribute("class", "discrP");
+    discrP.innerHTML = data[i].description;
+    // All Apend child here
     cardBody.appendChild(p);
     cardBody.appendChild(h5);
     divCard.appendChild(img);
     divCard.appendChild(cardBody);
     divContainer.appendChild(divCard);
-
-    let discrP = document.createElement("p");
-    // cardBody.classList.add("card-text");
-    discrP.setAttribute("class", "discrP");
-    discrP.innerHTML = data[i].description;
     cardBody.appendChild(discrP);
 
-    //about show more button//
+    //About show more button//
 
     let moreButton = document.createElement("button");
     moreButton.innerText = "show more";
@@ -95,7 +95,7 @@ const createEvents = (data) => {
   });
 };
 
-//listen for the events from the two HTML elements
+// CONTROL FUNTION
 const setEventListeners = (data) => {
   document
     .querySelector("#category-dropdown")
@@ -130,17 +130,17 @@ const setDropdownFilter = (data) => {
   });
   // displayCardData(cleanedFilter);
 };
-//filtering in category one of the dropdowns
-const selectItemDropdown = (data) => {
-  const dropdown = document.getElementById("category-dropdown").value;
-  console.log("dropdown: ", dropdown);
+// filtering in category one of the dropdowns
+// const selectItemDropdown = (data) => {
+//   const dropdown = document.getElementById("category-dropdown").value;
+//   console.log("dropdown: ", dropdown);
 
-  const categorys = data.filter((category) => {
-    return category.category === dropdown.toLowerCase() || dropdown === "all";
-  });
-  console.log("categorys: ", categorys);
-  createCards(categorys);
-};
+//   const categorys = data.filter((category) => {
+//     return category.category === dropdown.toLowerCase() || dropdown === "all";
+//   });
+//   console.log("categorys: ", categorys);
+//   createCards(categorys);
+// };
 
 // create a funtion in title
 const setTitleFilter = (data) => {
@@ -158,20 +158,20 @@ const setTitleFilter = (data) => {
     dropDownValue.appendChild(option);
   });
 };
-// filtering in title;
-const filterByTitle = (data) => {
-  const dropdown = document.getElementById("title-dropdown").value;
-  // console.log("dropdown:>> ", dropdown.toupperCase());
+// filtering in title(first here try  doing a single filtering )
+// const filterByTitle = (data) => {
+//   const dropdown = document.getElementById("title-dropdown").value;
+//   // console.log("dropdown:>> ", dropdown.toupperCase());
 
-  const tiltes = data.filter((title) => {
-    // console.log("title.title: ", title.title === dropdown.toLowerCase());
-    return title.title === dropdown.toLowerCase();
-  });
-  console.log("titles: ", tiltes);
-  createCards(tiltes);
-};
-
-// combined filtering  with category and serch bar
+//   const tiltes = data.filter((title) => {
+//     // console.log("title.title: ", title.title === dropdown.toLowerCase());
+//     return title.title === dropdown.toLowerCase();
+//   });
+//   console.log("titles: ", tiltes);
+//   createCards(tiltes);
+// };
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+//Here  doing a  combined filtering  with category and serch bar
 const filterCombined = (data) => {
   // ––––––THis is to find the value selected in the dropdown–––––
   const dropDownValue = document
